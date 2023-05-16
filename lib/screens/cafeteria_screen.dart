@@ -17,6 +17,8 @@ class CafeteriaScreen extends StatefulWidget {
 }
 
 class _CafeteriaScreenState extends State<CafeteriaScreen> {
+  bool isNonVeg = true;
+  bool isVeg = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,10 +95,8 @@ class _CafeteriaScreenState extends State<CafeteriaScreen> {
                                 style: listingStyle,
                               ),
                             if (i == 'assets/images/WhiteSaucePasta.png')
-                              Text(
-                                "${FoodList[3]} - ${prices[3]}",
-                                style: listingStyle
-                              ),
+                              Text("${FoodList[3]} - ${prices[3]}",
+                                  style: listingStyle),
                             if (i == 'assets/images/Samosa.png')
                               Text(
                                 "${FoodList[4]} - ${prices[4]}",
@@ -120,69 +120,41 @@ class _CafeteriaScreenState extends State<CafeteriaScreen> {
                 }).toList(),
               ),
               const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // Handle "Hot" button press
-                    },
-                    child: const Text(
-                      "Hot",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Checkbox(
+                      value: isVeg,
+                      onChanged: (value) {
+                        setState(() {
+                          isVeg = !isVeg;
+                        });
+                      },
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () {
-                      // Handle "Iced" button press
-                    },
-                    child: const Text(
-                      "Iced",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    const Text("Veg"),
+                    Checkbox(
+                      value: isNonVeg,
+                      onChanged: (value) {
+                        setState(() {
+                          isNonVeg = !isNonVeg;
+                        });
+                      },
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () {
-                      // Handle "Smoothies" button press
-                    },
-                    child: const Text(
-                      "Smoothies",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
+                    const Text("Non-Veg"),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_cafe),
-            label: 'Cafe',
-          ),
-        ],
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: const Text("Menu"),
+        icon: const Icon(Icons.menu),
       ),
     );
   }

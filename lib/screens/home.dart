@@ -1,3 +1,4 @@
+import 'package:cafeteria/screens/cafeteria_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -49,13 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(height: screenHeight * 0.1), // Adjust the height as needed
+          SizedBox(height: screenHeight * 0.1),
           Container(
-              height: screenHeight * 0.1, // Adjust the height as needed
+              height: screenHeight * 0.1,
               alignment: Alignment.topCenter,
               child: Text(
                 descriptions[currentIndex],
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )),
           Expanded(
             flex: 2,
@@ -63,11 +65,19 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: imageAssets.length,
               itemBuilder: (context, index, _) {
                 return GestureDetector(
+                  onVerticalDragEnd: (DragEndDetails details) {
+                    if (details.primaryVelocity != null) {
+                      toggleText();
+                    }
+                  },
                   onTap: () {
-                    toggleText();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CafeteriaScreen()));
                   },
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    margin: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(
@@ -87,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Positioned.fill(
                             child: AnimatedOpacity(
                               opacity: isTapped ? 1.0 : 0.0,
-                              duration: Duration(milliseconds: 200),
+                              duration: const Duration(milliseconds: 200),
                               child: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
@@ -119,25 +129,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(height: 16),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: FractionallySizedBox(
-              widthFactor: 0.8,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AnotherPage(),
-                    ),
-                  );
-                },
-                child: Text('Click Here'),
-              ),
-            ),
+          const SizedBox(height: 16),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index) {},
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Cafe',
           ),
-          SizedBox(height: 26),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fastfood),
+            label: 'Tuckshop',
+          ),
         ],
       ),
     );

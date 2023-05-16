@@ -1,14 +1,12 @@
-
 import 'package:cafeteria/constants/routes.dart';
 import 'package:cafeteria/crud/collections_reference.dart';
+import 'package:cafeteria/screens/login_with_phone_number.dart';
 import 'package:cafeteria/styles/app_style.dart';
 import 'package:cafeteria/utilities/snack_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:developer' as devtools show log;
-
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,18 +21,6 @@ TextEditingController _password = TextEditingController();
 class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   bool _isPasswordVisible = false;
-  
-
-  Future<void> loginWithEmailAndPassword(email, password) async {
-    setState(() {
-      _isLoading = true;
-    });
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password);
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +35,11 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Notes",
+              "Welcome Back",
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const Text(
-              "Login to your app",
+              "Login to grab a meal",
               style: TextStyle(
                 fontSize: 44,
                 fontWeight: FontWeight.bold,
@@ -114,19 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               width: double.infinity,
               child: RawMaterialButton(
-                onPressed: () async {
-                  try {
-                    loginWithEmailAndPassword(_email.text, _password.text).then(
-                        (value) => Navigator.popAndPushNamed(
-                            context, homescreenRoute));
-                    user = FirebaseAuth.instance.currentUser;
-
-                    userId = user?.uid as String;
-                    devtools.log(userId);
-                  } on FirebaseAuthException {
-                    snackBar(context, "Invalid Credentials", "red");
-                  }
-                },
+                onPressed: () async {},
                 fillColor: accentColor,
                 elevation: 00,
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -143,10 +117,21 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 10,
             ),
-            Container(
+            const Text(
+              "Or",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
               width: double.infinity,
               child: RawMaterialButton(
-                onPressed: null,
+                onPressed:null,
                 fillColor: accentColor,
                 elevation: 00,
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -155,17 +140,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/google.svg',
-                      height: 25,
-                      width: 25,
-                    ),
-                    const SizedBox(
+                  children: const [
+                    
+                    SizedBox(
                       width: 20,
                     ),
-                    const Text(
-                      "Sign in with google",
+                    Text(
+                      "Login with Phone Number",
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ],
