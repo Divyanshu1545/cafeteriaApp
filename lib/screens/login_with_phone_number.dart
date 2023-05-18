@@ -1,15 +1,10 @@
 import 'package:cafeteria/constants/routes.dart';
 import 'package:cafeteria/styles/app_style.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
-
-
 import 'dart:developer' as devtools show log;
-
-
 
 class PhoneNumberLogin extends StatefulWidget {
   const PhoneNumberLogin({super.key});
@@ -19,34 +14,10 @@ class PhoneNumberLogin extends StatefulWidget {
 }
 
 class _PhoneNumberLoginState extends State<PhoneNumberLogin> {
-  var _phoneNumberController = TextEditingController();
-  bool _isPasswordVisible = false;
+  final _phoneNumberController = TextEditingController();
+  final bool _isPasswordVisible = false;
   Future<void> _loginWithPhoneNumber() async {
     final String phoneNumber = _phoneNumberController.text.trim();
-
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // Auto-verification if the SMS code is detected automatically.
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        // Handle successful login.
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Invalid OTP"),
-          showCloseIcon: true,
-          backgroundColor: Color.fromARGB(255, 164, 0, 0),
-          closeIconColor: Colors.black,
-          duration: Duration(seconds: 1),
-        ));
-      },
-      codeSent: (String verificationId, int? resendToken) {
-       
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-       
-      },
-    );
   }
 
   @override
@@ -103,17 +74,18 @@ class _PhoneNumberLoginState extends State<PhoneNumberLogin> {
               height: 4,
             ),
             TextButton(
-                onPressed: () {
-                  Navigator.of(context).popAndPushNamed(registerRoute);
-                },
-                child: const Text(
-                  "Not a user? Register here",
-                  style: TextStyle(color: Colors.blue),
-                )),
+              onPressed: () {
+                Navigator.of(context).popAndPushNamed(registerRoute);
+              },
+              child: const Text(
+                "Not a user? Register here",
+                style: TextStyle(color: Colors.blue),
+              ),
+            ),
             const SizedBox(
               height: 10,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: RawMaterialButton(
                 onPressed: () {},

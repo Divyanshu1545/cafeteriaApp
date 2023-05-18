@@ -1,16 +1,24 @@
+
+
+// ignore_for_file: unused_import
+
 import 'package:cafeteria/constants/routes.dart';
-import 'package:cafeteria/crud/collections_reference.dart';
+
 import 'package:cafeteria/constants/data.dart';
 import 'package:cafeteria/styles/app_style.dart';
 import 'package:cafeteria/utilities/snack_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:developer' as devtools show log;
 
 class CafeteriaScreen extends StatefulWidget {
-  const CafeteriaScreen({super.key});
+  
+  const CafeteriaScreen({
+  
+    super.key,
+  });
 
   @override
   State<CafeteriaScreen> createState() => _CafeteriaScreenState();
@@ -19,11 +27,13 @@ class CafeteriaScreen extends StatefulWidget {
 class _CafeteriaScreenState extends State<CafeteriaScreen> {
   bool isNonVeg = true;
   bool isVeg = true;
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cafeteria A"),
+        title: const Text("Tuck Shop A"),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart))
         ],

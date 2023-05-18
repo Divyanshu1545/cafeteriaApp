@@ -2,7 +2,7 @@ import 'package:cafeteria/screens/cafeteria_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import 'anotherpage.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -72,9 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CafeteriaScreen()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CafeteriaScreen(),
+                      ),
+                    );
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20.0),

@@ -1,9 +1,8 @@
 import 'package:cafeteria/constants/routes.dart';
-import 'package:cafeteria/crud/collections_reference.dart';
+
 import 'package:cafeteria/screens/login_with_phone_number.dart';
 import 'package:cafeteria/styles/app_style.dart';
 import 'package:cafeteria/utilities/snack_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:developer' as devtools show log;

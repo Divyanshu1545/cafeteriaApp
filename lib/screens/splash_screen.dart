@@ -1,3 +1,4 @@
+import 'package:cafeteria/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => HomeScreen(),
+        builder: (context) => const RegisterScreen(),
       ),
     );
   }
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Column(
               children: [
                 Image.asset(
-                  "images/plate.png",
+                  "./assets/images/plate.png",
                   height: 300.0,
                   width: 300.0,
                 ),
