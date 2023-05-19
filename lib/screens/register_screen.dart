@@ -23,11 +23,11 @@ class _RegisterViewState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final DatabaseUserService userService = DatabaseUserService();
-    
 
     TextEditingController _userName = TextEditingController();
     TextEditingController _email = TextEditingController();
     TextEditingController _password = TextEditingController();
+    TextEditingController _organisation = TextEditingController();
     return FutureBuilder(
         future: DatabaseUserService.initializeDb(),
         builder: (context, snapshot) {
@@ -54,6 +54,24 @@ class _RegisterViewState extends State<RegisterScreen> {
                   ),
                   const SizedBox(
                     height: 44,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.name,
+                    controller: _organisation,
+                    decoration: InputDecoration(
+                      hintText: "Organisation",
+                      border: OutlineInputBorder(
+                        gapPadding: 4,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.forest,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 26,
                   ),
                   TextField(
                     keyboardType: TextInputType.emailAddress,
@@ -132,9 +150,10 @@ class _RegisterViewState extends State<RegisterScreen> {
                     child: RawMaterialButton(
                       onPressed: () async {
                         AppUser appUser = AppUser(
-                          userEmail: _email.text,
-                          userName: _userName.text,
-                          password: _password.text,
+                          userOrganisation: _organisation.text.trim(),
+                          userEmail: _email.text.trim(),
+                          userName: _userName.text.trim(),
+                          password: _password.text.trim(),
                         );
                         try {
                           setState(() {

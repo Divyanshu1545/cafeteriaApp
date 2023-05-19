@@ -5,6 +5,7 @@ import 'package:cafeteria/crud/db_user_service.dart';
 import 'package:cafeteria/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'dart:developer' as devTools;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
@@ -26,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigatetohome() async {
     await DatabaseUserService.initializeDb();
     prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("_id") == null) {
+    if (DatabaseUserService.currentUser == null) {
 // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
@@ -37,9 +38,14 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       final email = await prefs.getString("_id");
       final password = await prefs.getString("password");
+      devTools.log(email.toString());
+      devTools.log(password.toString());
+
       try {
         await DatabaseUserService.loginUser(
-            email as String, password as String);
+          email as String,
+          password as String,
+        );
       } on Exception {
         Navigator.pushReplacement(
           context,

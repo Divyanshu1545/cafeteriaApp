@@ -1,7 +1,9 @@
 import 'dart:developer' as devTools;
 
 import 'package:cafeteria/constants/mongo_constants.dart';
+import 'package:cafeteria/constants/shared_preferences.dart';
 import 'package:cafeteria/crud/db_user.dart';
+import 'package:flutter/material.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class DatabaseUserService {
@@ -40,7 +42,8 @@ class DatabaseUserService {
     WriteResult result = await userCollection.insertOne({
       "_id": appUser.userEmail,
       "userName": appUser.userName,
-      "password": appUser.password
+      "password": appUser.password,
+      "organisation": appUser.userOrganisation
     });
     if (result.hasWriteErrors) {
       throw UserAlreadyExistsException();
@@ -51,6 +54,12 @@ class DatabaseUserService {
     await userCollection.deleteOne({"_id": appUser.userEmail});
   }
 
+  static logOut() async {
+    DatabaseUserService.currentUser = null;
+    await prefs.setString('_id', "");
+    await prefs.setString('password', "");
+  }
+
   static Future<void> loginUser(String email, String password) async {
     await ensureInitialized();
     final result = await userCollection.findOne(where.eq("_id", email));
@@ -59,10 +68,18 @@ class DatabaseUserService {
     } else if (!result.containsValue(password)) {
       throw InvalidPasswordException();
     }
-    final String userName = result['userName'];
-    final String userEmail=result['_id'];
-    DatabaseUserService.currentUser = AppUser(
-        userEmail: userEmail, userName: userName, password: password);
+    try {
+      final String userName = result['userName'];
+      final String userEmail = result['_id'];
+      final String userOrganisation = result['organisation'];
+      DatabaseUserService.currentUser = AppUser(
+          userEmail: userEmail,
+          userName: userName,
+          password: password,
+          userOrganisation: userOrganisation);
+    } on Exception {
+      throw InvalidCredentialsException();
+    }
 
     devTools.log(result.toString());
   }

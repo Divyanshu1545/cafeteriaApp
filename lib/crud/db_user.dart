@@ -7,17 +7,19 @@ class AppUser {
   late final String userEmail;
   late final String userName;
   late final String password;
+  late final String userOrganisation;
 
-  AppUser({
-    required this.userEmail,
-    required this.userName,
-    required this.password,
-  });
+  AppUser(
+      {required this.userEmail,
+      required this.userName,
+      required this.password,
+      required this.userOrganisation});
   Map<String, String> toMap(AppUser user) {
     return {
       "_id": user.userEmail,
       "userName": user.userName,
-      "password": user.password
+      "password": user.password,
+      "organisation":user.userOrganisation
     };
   }
 
@@ -25,6 +27,6 @@ class AppUser {
   String toString() {
     // TODO: implement toString
 
-    return 'User {username: $userName, userEmail: $userEmail}';
+    return 'User {username: $userName, userEmail: $userEmail, organisation: $userOrganisation}';
   }
 }

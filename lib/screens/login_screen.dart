@@ -112,9 +112,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     try {
                       await DatabaseUserService.loginUser(email, password);
                       await prefs.setString("_id", email);
-
-                      devtools
-                          .log(await prefs.getString("userEmail") as String);
                       await prefs.setString("password", password);
                       Navigator.pushReplacementNamed(context, homescreenRoute);
                     } on InvalidPasswordException {
