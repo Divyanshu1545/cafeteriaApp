@@ -1,4 +1,5 @@
 import 'package:cafeteria/crud/db_user.dart';
+import 'package:cafeteria/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:cafeteria/screens/login_screen.dart';
 import 'constants/routes.dart';
@@ -10,18 +11,8 @@ import 'dart:developer' as devTools;
 import 'package:cafeteria/crud/db_user_service.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final dbUserService = DatabaseUserService();
-  final user = AppUser(
-    userEmail: "daroliadivyanshu45@gmail.com",
-    userName: "Divyanshu",
-    password: "abcd1234",
-  );
-  await dbUserService.initializeDb();
+  
 
-  try {
-    await dbUserService.createUser(user);
-  } on Exception catch (e) {}
   runApp(const MyApp());
 }
 
@@ -35,7 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         loginRoute: (context) => const LoginScreen(),
         registerRoute: (context) => const RegisterScreen(),
-        homescreenRoute: (context) => const CafeteriaScreen(),
+        homescreenRoute: (context) => HomeScreen(),
         loginWithPhoneNumberRoute: (context) => const PhoneNumberLogin(),
       },
       home: const SplashScreen(),

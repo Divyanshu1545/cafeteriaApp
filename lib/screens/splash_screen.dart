@@ -1,9 +1,12 @@
-import 'package:cafeteria/screens/register_screen.dart';
+// ignore_for_file: await_only_futures, use_build_context_synchronously
+
+import 'package:cafeteria/constants/shared_preferences.dart';
+import 'package:cafeteria/crud/db_user_service.dart';
+import 'package:cafeteria/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,14 +24,37 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigatetohome() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const RegisterScreen(),
-      ),
-    );
+    await DatabaseUserService.initializeDb();
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("_id") == null) {
+// ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
+    } else {
+      final email = await prefs.getString("_id");
+      final password = await prefs.getString("password");
+      try {
+        await DatabaseUserService.loginUser(
+            email as String, password as String);
+      } on Exception {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ),
+        );
+      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    }
   }
 
   @override

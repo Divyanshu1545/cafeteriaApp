@@ -16,20 +16,20 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterScreen> {
-  bool isLoading = true;
+  bool isLoading = false;
 
   bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     final DatabaseUserService userService = DatabaseUserService();
-    userService.initializeDb;
+    
 
     TextEditingController _userName = TextEditingController();
     TextEditingController _email = TextEditingController();
     TextEditingController _password = TextEditingController();
     return FutureBuilder(
-        future: userService.initializeDb(),
+        future: DatabaseUserService.initializeDb(),
         builder: (context, snapshot) {
           return Scaffold(
             appBar: AppBar(
@@ -137,9 +137,16 @@ class _RegisterViewState extends State<RegisterScreen> {
                           password: _password.text,
                         );
                         try {
-                          await userService.createUser(appUser);
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await DatabaseUserService.createUser(appUser);
+                          setState(() {
+                            isLoading = false;
+                          });
                           snackBar(
                               context, "User Successfully Created", "green");
+                          Navigator.popAndPushNamed(context, loginRoute);
                         } on UserAlreadyExistsException {
                           snackBar(context,
                               "User Already Exists with this email", "red");
