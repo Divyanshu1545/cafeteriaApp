@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: RawMaterialButton(
                   onPressed: () async {
-                    final email = _email.text;
+                    final email = _email.text.trim();
                     final password = _password.text;
 
                     try {

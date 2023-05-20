@@ -10,12 +10,12 @@ class DatabaseUserService {
   static bool isInitialized = false;
   static AppUser? currentUser;
 
-  static late final Db db;
-  static final userCollection = db.collection("users");
+  static late final Db userDb;
+  static final userCollection = userDb.collection(usersCollectionName);
   static Future<void> initializeDb() async {
     try {
-      db = await Db.create(mongoUrl);
-      await db
+      userDb = await Db.create(mongoUrl);
+      await userDb
           .open()
           .onError((error, stackTrace) => throw ErrorConnectingToUserService());
       devTools.log("db initialized");
@@ -32,7 +32,7 @@ class DatabaseUserService {
   }
 
   static Future<void> closeDb() async {
-    await db.close();
+    await userDb.close();
   }
 
   static Future<void> createUser(AppUser appUser) async {

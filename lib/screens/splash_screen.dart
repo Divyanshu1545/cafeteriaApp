@@ -1,6 +1,7 @@
 // ignore_for_file: await_only_futures, use_build_context_synchronously
 
 import 'package:cafeteria/constants/shared_preferences.dart';
+import 'package:cafeteria/crud/db_cafeteria_service.dart';
 import 'package:cafeteria/crud/db_user_service.dart';
 import 'package:cafeteria/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigatetohome() async {
     await DatabaseUserService.initializeDb();
     prefs = await SharedPreferences.getInstance();
-    if (DatabaseUserService.currentUser == null) {
-// ignore: use_build_context_synchronously
+    final email = await prefs.getString("_id");
+    if (email == null || email == "") {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -36,16 +37,18 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     } else {
-      final email = await prefs.getString("_id");
       final password = await prefs.getString("password");
+
       devTools.log(email.toString());
       devTools.log(password.toString());
 
       try {
         await DatabaseUserService.loginUser(
-          email as String,
+          email,
           password as String,
         );
+        await DatabaseCafeteriaService.initializeCafeDb();
+        await DatabaseCafeteriaService.getAllCafe();
       } on Exception {
         Navigator.pushReplacement(
           context,
@@ -84,13 +87,9 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Column(
-              children: [
-                Image.asset(
-                  "./assets/images/plate.png",
-                  height: 300.0,
-                  width: 300.0,
-                ),
-                const Text(
+              children: const [
+                
+                Text(
                   "Cafeteria",
                   textAlign: TextAlign.center,
                   style: TextStyle(
