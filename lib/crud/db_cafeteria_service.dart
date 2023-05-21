@@ -9,9 +9,12 @@ class DatabaseCafeteriaService {
   static final cafeteriaColleciton = cafeDb.collection(cafeteriaCollectionName);
   static bool isInitialized = false;
   static Future<void> initializeCafeDb() async {
+    devtools.log("Initializing Cafe DB");
     cafeDb = await Db.create(mongoUrl);
     await cafeDb.open().onError((error, stackTrace) => throw ErrorConnecting());
     DatabaseCafeteriaService.isInitialized = true;
+    devtools.log("Getting List of cafeterias");
+    await DatabaseCafeteriaService.getAllCafe();
   }
 
   static Future<void> getAllCafe() async {

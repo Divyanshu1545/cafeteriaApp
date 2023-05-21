@@ -38,7 +38,7 @@ class DatabaseUserService {
   static Future<void> createUser(AppUser appUser) async {
     // if(userCollection.count(where))
     ensureInitialized();
-
+    passwordStrengthValidator(appUser.password);
     WriteResult result = await userCollection.insertOne({
       "_id": appUser.userEmail,
       "userName": appUser.userName,
@@ -82,6 +82,42 @@ class DatabaseUserService {
     }
 
     devTools.log(result.toString());
+  }
+
+  static void passwordStrengthValidator(String password) {
+    final RegExp uppercaseRegex = RegExp(r'[A-Z]');
+    final RegExp lowercaseRegex = RegExp(r'[a-z]');
+    final RegExp digitRegex = RegExp(r'\d');
+    final RegExp specialCharRegex = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+
+    if (!uppercaseRegex.hasMatch(password)) {
+      throw WeakPasswordException(
+          'Password must include at least one uppercase letter');
+    }
+
+    if (!lowercaseRegex.hasMatch(password)) {
+      throw WeakPasswordException(
+          'Password must include at least one lowercase letter');
+    }
+
+    if (!digitRegex.hasMatch(password)) {
+      throw WeakPasswordException('Password must include at least one digit');
+    }
+
+    if (!specialCharRegex.hasMatch(password)) {
+      throw WeakPasswordException(
+          'Password must include at least one special character');
+    }
+  }
+}
+
+class WeakPasswordException implements Exception {
+  final String message;
+
+  WeakPasswordException(this.message);
+  @override
+  String toString() {
+    return message;
   }
 }
 

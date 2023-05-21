@@ -1,34 +1,43 @@
-import 'package:cafeteria/crud/db_cafeteria_service.dart';
-import 'package:cafeteria/widgets/cafeteria_card.dart';
+// ignore_for_file: implementation_imports, unnecessary_import
+
+import 'package:cafeteria/crud/db_menu_item_service.dart';
+import 'package:cafeteria/screens/home.dart';
+import 'package:cafeteria/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer' as devtools show log;
 import '../constants/routes.dart';
 import '../crud/db_user_service.dart';
+import '../widgets/cafeteria_card.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class CafeMenuScreen extends StatefulWidget {
+  final Cafeteria cafeteria;
+  const CafeMenuScreen({super.key, required this.cafeteria});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CafeMenuScreen> createState() => _CafeMenuScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CafeMenuScreenState extends State<CafeMenuScreen> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return FutureBuilder(
-        future: DatabaseCafeteriaService.initializeCafeDb(),
+        future: LunchMenuService.initializeCafeMenuDb(
+            widget.cafeteria, DateTime.now()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-                backgroundColor: Colors.deepPurple[100],
-                body: const Center(child: CircularProgressIndicator()));
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else {
             return Scaffold(
               appBar: AppBar(
-                title: const Text("Cafeterias"),
+                title: const Text("Lunch Booking"),
                 backgroundColor: Colors.transparent,
               ),
               drawer: Drawer(
@@ -78,33 +87,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               body: Column(
                 children: [
+                  Text(
+                    "Today's Menu",
+                    style: GoogleFonts.dmSans(
+                        fontSize: 35, fontWeight: FontWeight.bold),
+                  ),
                   Expanded(
                     child: ListView.builder(
-                      itemBuilder: (context, index) => CafeteriaCard(
-                        cafe: DatabaseCafeteriaService.cafeList[index],
-                      ),
-                      itemCount: DatabaseCafeteriaService.cafeList.length,
-                    ),
-                  ),
+                        itemCount: widget.cafeteria.cafeMenuList.length,
+                        itemBuilder: (context, index) => LunchMenuCard(
+                            menu: widget.cafeteria.cafeMenuList[index])),
+                  )
                 ],
               ),
-              bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: Colors.deepPurple[100],
-                selectedItemColor: Colors.deepOrangeAccent,
-                currentIndex: 0,
-                onTap: (index) {},
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.food_bank),
-                    label: 'Cafe',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.fastfood),
-                    label: 'Tuckshop',
-                  ),
-                ],
-              ),
-              backgroundColor: const Color.fromARGB(255, 165, 165, 165),
+              endDrawerEnableOpenDragGesture: true,
+              backgroundColor: Colors.deepPurple[100],
             );
           }
         });
