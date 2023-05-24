@@ -1,12 +1,14 @@
 // ignore_for_file: implementation_imports, unnecessary_import
 
 import 'package:cafeteria/crud/db_menu_item_service.dart';
+import 'package:cafeteria/screens/dummy_card.dart';
 import 'package:cafeteria/screens/home.dart';
 import 'package:cafeteria/widgets/menu_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer' as devtools show log;
 import '../constants/routes.dart';
@@ -31,8 +33,21 @@ class _CafeMenuScreenState extends State<CafeMenuScreen> {
             widget.cafeteria, DateTime.now()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text("Lunch Booking"),
+                backgroundColor: Colors.transparent,
+              ),
+              backgroundColor: Colors.deepPurple[100],
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    children: const [DummyCard(), DummyCard()],
+                  ),
+                ],
+              ),
             );
           } else {
             return Scaffold(

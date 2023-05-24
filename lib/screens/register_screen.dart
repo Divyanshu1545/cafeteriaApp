@@ -1,5 +1,6 @@
 import 'package:cafeteria/crud/db_user.dart';
 import 'package:cafeteria/crud/db_user_service.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -169,16 +170,17 @@ class _RegisterViewState extends State<RegisterScreen> {
                                 userName: _userName.text.trim(),
                                 password: _password.text.trim(),
                               );
+
                               try {
+                                if (email == null) {
+                                  throw InvalidEmailException();
+                                } else if (!EmailValidator.validate(
+                                    email ?? "")) {
+                                  throw InvalidEmailException();
+                                }
                                 DatabaseUserService.passwordStrengthValidator(
                                     _password.text);
-                              } on WeakPasswordException catch (e) {
-                                snackBar(context, e.message, "red");
-                                setState(() {
-                                  isLoading = false;
-                                });
-                              }
-                              try {
+
                                 setState(() {
                                   isLoading = true;
                                 });
@@ -186,11 +188,25 @@ class _RegisterViewState extends State<RegisterScreen> {
 
                                 snackBar(context, "User Successfully Created",
                                     "green");
+
                                 Navigator.popAndPushNamed(context, loginRoute);
+                              } on WeakPasswordException catch (e) {
+                                snackBar(context, e.message, "red");
+                                setState(() {
+                                  isLoading = false;
+                                });
                               } on UserAlreadyExistsException {
+                                email = null;
                                 snackBar(
                                     context,
                                     "User Already Exists with this email",
+                                    "red");
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              } on InvalidEmailException {
+                                email = null;
+                                snackBar(context, "Please enter a valid email.",
                                     "red");
                                 setState(() {
                                   isLoading = false;

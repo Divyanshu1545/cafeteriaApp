@@ -4,6 +4,7 @@ import 'package:cafeteria/constants/shared_preferences.dart';
 import 'package:cafeteria/crud/db_cafeteria_service.dart';
 import 'package:cafeteria/crud/db_user_service.dart';
 import 'package:cafeteria/screens/home.dart';
+import 'package:cafeteria/screens/home_with_stream_builder.dart';
 import 'package:cafeteria/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -48,6 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
           email,
           password as String,
         );
+        await DatabaseCafeteriaService.initializeCafeDb();
       } on Exception {
         Navigator.pushReplacement(
           context,
@@ -58,9 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     }
   }

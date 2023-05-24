@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         registerRoute: (context) => const RegisterScreen(),
         homescreenRoute: (context) => const HomeScreen(),
         loginWithPhoneNumberRoute: (context) => const PhoneNumberLogin(),
+    
       },
       home: const SplashScreen(),
     );

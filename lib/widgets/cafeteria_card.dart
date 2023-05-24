@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mongo_dart/mongo_dart.dart';
+import 'dart:developer' as devtools show log;
 
 class Cafeteria {
   final String name;
@@ -25,7 +26,6 @@ class Cafeteria {
 
   @override
   String toString() {
-    
     return "Cafeteria: {Name: $name}, CafeID: $cafeId, Seats: $seats, Description: $description }";
   }
 }
@@ -36,6 +36,7 @@ class CafeteriaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    devtools.log(cafe.toString());
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(

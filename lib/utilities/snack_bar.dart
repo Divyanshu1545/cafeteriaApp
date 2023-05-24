@@ -13,6 +13,6 @@ snackBar(context, String msg, String clr) {
     showCloseIcon: true,
     backgroundColor: color,
     closeIconColor: Colors.black,
-    duration: const Duration(seconds: 1),
+    duration: const Duration(seconds: 2),
   ));
 }

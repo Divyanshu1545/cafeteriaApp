@@ -8,13 +8,29 @@ class DatabaseCafeteriaService {
   static List<Cafeteria> cafeList = [];
   static final cafeteriaColleciton = cafeDb.collection(cafeteriaCollectionName);
   static bool isInitialized = false;
+
   static Future<void> initializeCafeDb() async {
     devtools.log("Initializing Cafe DB");
     cafeDb = await Db.create(mongoUrl);
     await cafeDb.open().onError((error, stackTrace) => throw ErrorConnecting());
     DatabaseCafeteriaService.isInitialized = true;
     devtools.log("Getting List of cafeterias");
-    await DatabaseCafeteriaService.getAllCafe();
+    //  await DatabaseCafeteriaService.getAllCafe();
+  }
+
+  static Cafeteria mapToCafeteria(Map<String, dynamic> cafeMap) {
+    return Cafeteria(
+        name: cafeMap["name"],
+        cafeId: cafeMap["_id"],
+        description: cafeMap["description"],
+        seats: cafeMap["seats"]);
+  }
+
+  static Stream<Map<String, dynamic>> getAllCafeAsStream() async* {
+    await for (final document in cafeteriaColleciton.find()) {
+      devtools.log(document.toString());
+      yield document;
+    }
   }
 
   static Future<void> getAllCafe() async {
