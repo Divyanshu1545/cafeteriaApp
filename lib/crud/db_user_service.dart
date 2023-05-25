@@ -19,6 +19,8 @@ class DatabaseUserService {
           .open()
           .onError((error, stackTrace) => throw ErrorConnectingToUserService());
       devTools.log("db initialized");
+      List userList = await userCollection.find().toList();
+      devTools.log(userList.length.toString());
     } on ErrorConnectingToUserService {
       devTools.log("Could not open connection");
     }

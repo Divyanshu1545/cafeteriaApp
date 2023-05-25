@@ -15,7 +15,7 @@ class DatabaseCafeteriaService {
     await cafeDb.open().onError((error, stackTrace) => throw ErrorConnecting());
     DatabaseCafeteriaService.isInitialized = true;
     devtools.log("Getting List of cafeterias");
-    //  await DatabaseCafeteriaService.getAllCafe();
+    await DatabaseCafeteriaService.getAllCafe();
   }
 
   static Cafeteria mapToCafeteria(Map<String, dynamic> cafeMap) {
@@ -26,22 +26,20 @@ class DatabaseCafeteriaService {
         seats: cafeMap["seats"]);
   }
 
-  static Stream<Map<String, dynamic>> getAllCafeAsStream() async* {
-    await for (final document in cafeteriaColleciton.find()) {
-      devtools.log(document.toString());
-      yield document;
-    }
-  }
-
   static Future<void> getAllCafe() async {
     var result = await cafeteriaColleciton.find().toList();
+    devtools.log('Results fetched: ${result.length.toString()}');
     for (Map<String, dynamic> cafe in result) {
-      Cafeteria cafeteria = Cafeteria(
-          name: cafe["name"],
-          cafeId: cafe["_id"],
-          description: cafe["description"],
-          seats: cafe["seats"]);
-      cafeList.add(cafeteria);
+    
+        Cafeteria cafeteria = Cafeteria(
+            name: cafe["name"],
+            cafeId: cafe["_id"],
+            description: cafe["description"],
+            seats: cafe["seats"]);
+        devtools.log(cafeteria.toString());
+        cafeList.add(cafeteria);
+        isInitialized = true;
+      
     }
     devtools.log(cafeList.toString());
     devtools.log("No. of cafeterias: ${cafeList.length}");

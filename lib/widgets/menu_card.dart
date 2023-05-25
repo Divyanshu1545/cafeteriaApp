@@ -10,20 +10,17 @@ class LunchMenu {
   final String breads;
   final String mainCourse;
   final String sides;
-  final String salad;
-  final String sweets;
 
-  LunchMenu(
-      {required this.type,
-      required this.breads,
-      required this.mainCourse,
-      required this.sides,
-      required this.salad,
-      required this.sweets});
+  LunchMenu({
+    required this.type,
+    required this.breads,
+    required this.mainCourse,
+    required this.sides,
+  });
   @override
   String toString() {
     // TODO: implement toString
-    return "$type, $breads, $mainCourse, $sides, $salad, $sweets";
+    return "$type, $breads, $mainCourse, $sides, ";
   }
 }
 
@@ -156,25 +153,7 @@ class LunchMenuCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 13),
-                    const Text(
-                      "Sweets",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "   ${menu.sweets}",
-                      style: const TextStyle(
-                        fontSize: 25,
-                        color: Colors.white54,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    
                     Expanded(
                         child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,

@@ -26,7 +26,6 @@ class LunchMenuService {
   }
 
   static Future<void> getAllMenu(Cafeteria cafe, DateTime dateTime) async {
-    
     final dayNumber = dateTime.weekday;
     var result = await cafeMenuDb
         .collection(menuCollectionName)
@@ -40,14 +39,13 @@ class LunchMenuService {
       String sides = element['sides'] ?? "";
       String salad = element['salad'] ?? "";
       String sweets = element['sweets'] ?? "";
-      
+
       LunchMenu menu = LunchMenu(
-          type: type,
-          breads: breads,
-          mainCourse: mainCourse,
-          sides: sides,
-          salad: salad,
-          sweets: sweets);
+        type: type,
+        breads: breads,
+        mainCourse: mainCourse,
+        sides: sides,
+      );
       cafe.cafeMenuList.add(menu);
     }
     devtools.log("Cafe Menu fetched: ${cafe.cafeMenuList.toString()}");

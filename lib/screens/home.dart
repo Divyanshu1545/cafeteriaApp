@@ -19,10 +19,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   var _selectedIndex = 0;
-  Future<void> initializeDB() async {
-    devtools.log("Getting cafe to list");
-    await DatabaseCafeteriaService.getAllCafe();
-  }
+  // Future<void> initializeDB() async {
+  //   devtools.log("Getting cafe to list");
+  //   await DatabaseCafeteriaService.getAllCafe();
+  // }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -33,88 +33,97 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: initializeDB(),
+        future: DatabaseCafeteriaService.initializeCafeDb(),
         builder: (context, snapshot) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text("Cafeterias"),
-              backgroundColor: Colors.transparent,
-            ),
-            drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  UserAccountsDrawerHeader(
-                    decoration: const BoxDecoration(color: Color(0xff764abc)),
-                    accountName: Text(
-                      DatabaseUserService.currentUser?.userName ?? "",
-                      style: GoogleFonts.acme(
-                          fontWeight: FontWeight.bold, fontSize: 28),
-                    ),
-                    accountEmail: Text(
-                      DatabaseUserService.currentUser?.userEmail ?? "",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            devtools.log("Waiting");
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            devtools.log("Done");
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text("Cafeterias"),
+                backgroundColor: Colors.transparent,
+              ),
+              drawer: Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    UserAccountsDrawerHeader(
+                      decoration: const BoxDecoration(color: Color(0xff764abc)),
+                      accountName: Text(
+                        DatabaseUserService.currentUser?.userName ?? "",
+                        style: GoogleFonts.acme(
+                            fontWeight: FontWeight.bold, fontSize: 28),
                       ),
+                      accountEmail: Text(
+                        DatabaseUserService.currentUser?.userEmail ?? "",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      currentAccountPicture: const FlutterLogo(),
                     ),
-                    currentAccountPicture: const FlutterLogo(),
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.home,
-                    ),
-                    title: const Text('Page 1'),
-                    onTap: () {
-                      devtools.log(DateTime.parse("${DateTime.now()}")
-                          .weekday
-                          .toString());
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
+                    ListTile(
                       leading: const Icon(
-                        Icons.logout,
+                        Icons.home,
                       ),
-                      title: const Text('Logout'),
+                      title: const Text('Page 1'),
                       onTap: () {
-                        DatabaseUserService.logOut();
-                        Navigator.popAndPushNamed(context, loginRoute);
-                        devtools
-                            .log(DatabaseUserService.currentUser.toString());
-                      }),
+                        devtools.log(DateTime.parse("${DateTime.now()}")
+                            .weekday
+                            .toString());
+                      },
+                    ),
+                    ListTile(
+                        leading: const Icon(
+                          Icons.logout,
+                        ),
+                        title: const Text('Logout'),
+                        onTap: () {
+                          DatabaseUserService.logOut();
+                          Navigator.popAndPushNamed(context, loginRoute);
+                          devtools
+                              .log(DatabaseUserService.currentUser.toString());
+                        }),
+                  ],
+                ),
+              ),
+              body: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => CafeteriaCard(
+                        cafe: DatabaseCafeteriaService.cafeList[index],
+                      ),
+                      itemCount: DatabaseCafeteriaService.cafeList.length,
+                    ),
+                  ),
                 ],
               ),
-            ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => CafeteriaCard(
-                      cafe: DatabaseCafeteriaService.cafeList[index],
-                    ),
-                    itemCount: DatabaseCafeteriaService.cafeList.length,
+              bottomNavigationBar: BottomNavigationBar(
+                backgroundColor: const Color.fromARGB(255, 233, 233, 233),
+                selectedItemColor: Colors.deepOrangeAccent,
+                currentIndex: _selectedIndex,
+                onTap: (index) {},
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.food_bank),
+                    label: 'Cafe',
                   ),
-                ),
-              ],
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: Colors.deepPurple[100],
-              selectedItemColor: Colors.deepOrangeAccent,
-              currentIndex: _selectedIndex,
-              onTap: (index) {},
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.food_bank),
-                  label: 'Cafe',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.fastfood),
-                  label: 'Tuckshop',
-                ),
-              ],
-            ),
-            backgroundColor: const Color.fromARGB(255, 165, 165, 165),
-          );
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.fastfood),
+                    label: 'Tuckshop',
+                  ),
+                ],
+              ),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            );
+          }
         });
   }
 }
